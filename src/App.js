@@ -1,19 +1,16 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import Navbar from "./components/layout/Navbar";
+import Users from "./components/users/Users";
 
 class App extends Component {
-  printName = () => 'Sanfeer';
   render() {
-    // const name = 'Sanfeer';
-    const loading = false;
-    const showName = true;
     return (
       <React.Fragment>
-        {loading ? (
-          <h1>Loading...</h1>
-        ) : (
-          <h1>Hello {showName && this.printName()}</h1>
-        )}
+        <Navbar icon="fa fa-github" title="Github Finder" />
+        <div className="container">
+          <Users />
+        </div>
       </React.Fragment>
     );
   }
