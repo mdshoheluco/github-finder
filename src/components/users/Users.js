@@ -1,69 +1,24 @@
-import React, { Component } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import UserItem from "./UserItem";
+import Spinner from "../layout/Spinner";
 
-class Users extends Component {
-  state = {
-    users: [
-      {
-        id: "1",
-        login: "defunkt",
-        avatar_url: "https://avatars0.githubusercontent.com/u/2?v=4",
-        html_url: "https://github.com/defunkt",
-      },
-      {
-        id: "2",
-        login: "mojombo",
-        avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4",
-        html_url: "https://github.com/mojombo",
-      },
-      {
-        id: "3",
-        login: "pjhyett",
-        avatar_url: "https://avatars0.githubusercontent.com/u/3?v=4",
-        html_url: "https://github.com/pjhyett",
-      },
-      {
-        id: "1",
-        login: "defunkt",
-        avatar_url: "https://avatars0.githubusercontent.com/u/2?v=4",
-        html_url: "https://github.com/defunkt",
-      },
-      {
-        id: "2",
-        login: "mojombo",
-        avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4",
-        html_url: "https://github.com/mojombo",
-      },
-      {
-        id: "3",
-        login: "pjhyett",
-        avatar_url: "https://avatars0.githubusercontent.com/u/3?v=4",
-        html_url: "https://github.com/pjhyett",
-      },
-      {
-        id: "1",
-        login: "defunkt",
-        avatar_url: "https://avatars0.githubusercontent.com/u/2?v=4",
-        html_url: "https://github.com/defunkt",
-      },
-      {
-        id: "2",
-        login: "mojombo",
-        avatar_url: "https://avatars0.githubusercontent.com/u/1?v=4",
-        html_url: "https://github.com/mojombo",
-      },
-    ],
-  };
-  render() {
-    return (
-      <div style={gridStyle}>
-        {this.state.users.map((user) => (
-          <UserItem key={user.id} user={user} />
-        ))}
-      </div>
-    );
-  }
-}
+const Users = ({ users, loading }) => {
+  return (
+    <div style={gridStyle}>
+      {loading ? (
+        <Spinner />
+      ) : (
+        users.map((user) => <UserItem key={user.id} user={user} />)
+      )}
+    </div>
+  );
+};
+
+Users.defaultProps = {
+  users: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
 
 const gridStyle = {
   display: "grid",
