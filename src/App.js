@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/layout/Navbar";
 import Users from "./components/users/Users";
 import axios from "axios";
 import Search from "./components/users/Search";
+import Button from "./components/layout/Button";
+import Alert from "./components/layout/Alert";
+import About from "./components/pages/About";
+import User from "./components/users/User";
 
 const App = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    async function fetchData() {
-      console.log(process.env.REACT_APP_GITHUB_CLIENT_ID);
-      setLoading(true);
-      const res = await axios.get(
-        `https://api.github.com/users?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_secret}`
-      );
-      setUsers(res.data);
-      setLoading(false);
-    }
-    fetchData();
-  }, []);
+  const [alertMessage, setAlertMessage] = useState(null);
+
+  const [user, setUser] = useState({});
 
   const handleSearch = async (text) => {
     setLoading(true);
@@ -30,14 +26,59 @@ const App = () => {
     setLoading(false);
   };
 
+  const clickHandler = () => {
+    setUsers([]);
+  };
+
+  const alertHandler = (msg, type) => {
+    setAlertMessage({ msg, type });
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, 5000);
+  };
+
+  const getUser = async (username) => {
+    setUser(true);
+    const user = await axios.get(`https://api.github.com/users/${username}`);
+    setUser(false);
+    setUser(user.data);
+  };
+
   return (
-    <React.Fragment>
-      <Navbar icon="fa fa-github" title="Github Finder" />
-      <div className="container">
-        <Search onSearch={handleSearch} />
-        <Users users={users} loading={loading} />
-      </div>
-    </React.Fragment>
+    <Router>
+      <React.Fragment>
+        <Navbar icon="fa fa-github" title="Github Finder" />
+        <div className="container">
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={(props) => (
+                <>
+                  <Alert alert={alertMessage} />
+                  <Search onSearch={handleSearch} setAlert={alertHandler} />
+                  <Button text="Clear" onclick={clickHandler} />
+                  <Users users={users} loading={loading} />
+                </>
+              )}
+            ></Route>
+            <Route path="/about" exact component={About}></Route>
+            <Route
+              path="/user/:login"
+              exact
+              render={(props) => (
+                <User
+                  {...props}
+                  getUser={getUser}
+                  loading={loading}
+                  user={user}
+                />
+              )}
+            />
+          </Switch>
+        </div>
+      </React.Fragment>
+    </Router>
   );
 };
 

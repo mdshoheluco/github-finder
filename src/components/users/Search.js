@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import Button from "../layout/Button";
 
-const Search = ({ onSearch }) => {
+const Search = ({ onSearch, setAlert }) => {
   const [text, setText] = useState("");
   const onChange = (e) => {
     setText(e.target.value);
@@ -8,9 +9,14 @@ const Search = ({ onSearch }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    onSearch(text);
-    setText("");
+    if (text === "") {
+      setAlert("Please enter something", "light");
+    } else {
+      onSearch(text);
+      setText("");
+    }
   };
+
   return (
     <form className="form" onSubmit={onSubmit}>
       <input
@@ -20,7 +26,7 @@ const Search = ({ onSearch }) => {
         value={text}
         onChange={onChange}
       />
-      <input type="submit" className="btn btn-dark btn-block" value="Search" />
+      <Button text="Search" type="dark" />
     </form>
   );
 };
