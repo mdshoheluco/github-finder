@@ -10,6 +10,17 @@ import Alert from "./components/layout/Alert";
 import About from "./components/pages/About";
 import User from "./components/users/User";
 
+let githubCleintId;
+let githubCleintSecret;
+
+if (process.env !== "production") {
+  githubCleintId = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  githubCleintSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+} else {
+  githubCleintId = process.env.GITHUB_CLIENT_ID;
+  githubCleintSecret = process.env.GITHUB_CLIENT_SECRET;
+}
+
 const App = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +31,7 @@ const App = () => {
   const handleSearch = async (text) => {
     setLoading(true);
     const res = await axios.get(
-      `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_secret}`
+      `https://api.github.com/search/users?q=${text}&client_id=${githubCleintId}&client_secret=${githubCleintSecret}`
     );
     setUsers(res.data.items);
     setLoading(false);
@@ -39,7 +50,9 @@ const App = () => {
 
   const getUser = async (username) => {
     setUser(true);
-    const user = await axios.get(`https://api.github.com/users/${username}`);
+    const user = await axios.get(
+      `https://api.github.com/users/${username}?client_id=${githubCleintId}&client_secret=${githubCleintSecret}`
+    );
     setUser(false);
     setUser(user.data);
   };
@@ -57,7 +70,9 @@ const App = () => {
                 <>
                   <Alert alert={alertMessage} />
                   <Search onSearch={handleSearch} setAlert={alertHandler} />
-                  <Button text="Clear" onclick={clickHandler} />
+                  {users.length > 0 && (
+                    <Button text="Clear" onclick={clickHandler} />
+                  )}
                   <Users users={users} loading={loading} />
                 </>
               )}
