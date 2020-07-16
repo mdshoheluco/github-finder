@@ -10,7 +10,15 @@ const imageStyle = {
 const Spinner = () => {
   return (
     <React.Fragment>
-      <img src={spinner} alt="Loading..." style={imageStyle} />
+      <img
+        src={spinner}
+        alt="Loading..."
+        style={imageStyle}
+        style={{
+          width: "200px",
+          margin: "auto",
+        }}
+      />
     </React.Fragment>
   );
 };
