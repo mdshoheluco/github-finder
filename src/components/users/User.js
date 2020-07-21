@@ -1,11 +1,17 @@
-import React, { useEffect } from "react";
-import Spinner from "../layout/Spinner";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react'
+import Spinner from '../layout/Spinner'
+import { Link } from 'react-router-dom'
+import { useContext } from 'react'
 
-const User = (props) => {
+import GithubContext from '../../context/github/githubContext'
+
+const User = props => {
+  const githubContext = useContext(GithubContext)
+  const { getUser, loading, user } = githubContext
+  console.log(githubContext)
   useEffect(() => {
-    props.getUser(props.match.params.login);
-  }, []);
+    getUser(props.match.params.login)
+  }, [])
   const {
     name,
     login,
@@ -16,22 +22,22 @@ const User = (props) => {
     public_repos,
     public_gists,
     following,
-    followers,
-  } = props.user;
+    followers
+  } = user
 
-  if (props.loading) {
-    return <Spinner />;
+  if (loading) {
+    return <Spinner />
   }
   return (
     <div>
-      <Link to="/" className="btn btn-dark">
+      <Link to='/' className='btn btn-dark'>
         Back to Search
       </Link>
       <img
         src={avatar_url}
         alt={name}
-        style={{ width: "200px", display: "block", marginTop: "20px" }}
-        className="round-img"
+        style={{ width: '200px', display: 'block', marginTop: '20px' }}
+        className='round-img'
       />
       <p>{name}</p>
       <p>
@@ -44,7 +50,7 @@ const User = (props) => {
       </p>
       <a href={html_url}>Login</a>
     </div>
-  );
-};
+  )
+}
 
-export default User;
+export default User
